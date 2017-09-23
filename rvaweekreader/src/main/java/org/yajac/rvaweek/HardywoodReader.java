@@ -1,17 +1,16 @@
 package org.yajac.rvaweek;
 
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import org.jsoup.nodes.Element;
+import org.yajac.rvaweek.aws.ScheduledEvent;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
-import org.jsoup.nodes.Element;
-import org.yajac.rvaweek.aws.ScheduledEvent;
-
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
-
-public class HardywoodReader extends RVAReader {
+public class HardywoodReader extends org.yajac.rvaweek.RVAReader {
 
 	private static String URL = "https://hardywood.com";
 	private static String LOCATION_NAME = "Hardywood Brewery";
@@ -22,8 +21,8 @@ public class HardywoodReader extends RVAReader {
 	public static void main(String[] args) {
 		HardywoodReader rVAReader = new HardywoodReader();
 		try {
-			Set<Event> events = rVAReader.readWordpressEvents(URL + "/hwevents/taproom-events", SELECT_CLASS);
-			RVACacheWriter.insertEvents(events);
+			Set<Event> events = rVAReader.readEventsPage(URL + "/hwevents/taproom-events", SELECT_CLASS);
+			org.yajac.rvaweek.RVACacheWriter.insertEvents(events);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
@@ -32,8 +31,8 @@ public class HardywoodReader extends RVAReader {
 	public int handle(ScheduledEvent input, Context context) {
 		LambdaLogger logger = context.getLogger();
 		try {
-			Set<Event> events = readWordpressEvents(URL + "/hwevents/taproom-events", SELECT_CLASS);
-			RVACacheWriter.insertEvents(events);
+			Set<Event> events = readEventsPage(URL + "/hwevents/taproom-events", SELECT_CLASS);
+			org.yajac.rvaweek.RVACacheWriter.insertEvents(events);
 			logger.log("Events: " + events.size());
 			return events.size();
 		} catch (Exception e) {

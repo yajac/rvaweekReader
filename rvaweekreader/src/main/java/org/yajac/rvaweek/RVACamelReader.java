@@ -24,7 +24,7 @@ public class RVACamelReader extends RVAReader {
 	public static void main(String[] args) {
 		RVACamelReader rVAReader = new RVACamelReader();
 		try {
-			Set<Event> events = rVAReader.readWordpressEvents(URL, SELECT_CLASS);
+			Set<Event> events = rVAReader.readEventsPage(URL, SELECT_CLASS);
 			RVACacheWriter.insertEvents(events);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -34,7 +34,7 @@ public class RVACamelReader extends RVAReader {
 	public int handle(ScheduledEvent request, Context context) {
 		LambdaLogger logger = context.getLogger();
 		try {
-			Set<Event> events = readWordpressEvents(URL, SELECT_CLASS);
+			Set<Event> events = readEventsPage(URL, SELECT_CLASS);
 			RVACacheWriter.insertEvents(events);
 			logger.log("Events: " + events.size());
 			return events.size();

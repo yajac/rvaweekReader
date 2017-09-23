@@ -22,7 +22,7 @@ public class RVAStrangewaysReader extends RVAReader {
 	public static void main(String[] args) {
 		RVAStrangewaysReader rVAReader = new RVAStrangewaysReader();
 		try {
-			Set<Event> events = rVAReader.readWordpressEvents(URL + "/happenings", SELECT_CLASS);
+			Set<Event> events = rVAReader.readEventsPage(URL + "/happenings", SELECT_CLASS);
 			System.out.println("Size: " + events.size());
 			RVACacheWriter.insertEvents(events);
 		} catch (Exception e) {
@@ -33,7 +33,7 @@ public class RVAStrangewaysReader extends RVAReader {
 	public int handle(ScheduledEvent request, Context context) {
 		LambdaLogger logger = context.getLogger();
 		try {
-			Set<Event> events = readWordpressEvents(URL + "/happenings", SELECT_CLASS);
+			Set<Event> events = readEventsPage(URL + "/happenings", SELECT_CLASS);
 			RVACacheWriter.insertEvents(events);
 			logger.log("Events: " + events.size());
 			return events.size();

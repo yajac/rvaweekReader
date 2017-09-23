@@ -1,14 +1,13 @@
 package org.yajac.rvaweek;
 
-import java.time.Instant;
-import java.util.Date;
-import java.util.Set;
-
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import org.jsoup.nodes.Element;
 import org.yajac.rvaweek.aws.ScheduledEvent;
 
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import java.time.Instant;
+import java.util.Date;
+import java.util.Set;
 
 public class GardenGroveReader extends RVAReader {
 
@@ -18,20 +17,10 @@ public class GardenGroveReader extends RVAReader {
 	private static String CATEGORY = "Beer";
 	private static String ID_NAME = "GardenGrove";
 
-	public static void main(String[] args) {
-		GardenGroveReader rVAReader = new GardenGroveReader();
-		try {
-			Set<Event> events = rVAReader.readWordpressEvents(URL + "/all-events/events-calendar/", SELECT_CLASS);
-			RVACacheWriter.insertEvents(events);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-	}
-
 	public int handle(ScheduledEvent request, Context context) {
 		LambdaLogger logger = context.getLogger();
 		try {
-			Set<Event> events = readWordpressEvents(URL + "/all-events/events-calendar/", SELECT_CLASS);
+			Set<Event> events = readEventsPage(URL + "/all-events/events-calendar/", SELECT_CLASS);
 			RVACacheWriter.insertEvents(events);
 			logger.log("Events: " + events.size());
 			return events.size();

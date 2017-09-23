@@ -22,7 +22,7 @@ public class RVANationalReader extends RVAReader {
 	public static void main(String[] args) {
 		RVANationalReader rVAReader = new RVANationalReader();
 		try {
-			Set<Event> events = rVAReader.readWordpressEvents(URL + "/events/all", SELECT_CLASS);
+			Set<Event> events = rVAReader.readEventsPage(URL + "/events/all", SELECT_CLASS);
 			RVACacheWriter.insertEvents(events);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -32,7 +32,7 @@ public class RVANationalReader extends RVAReader {
 	public int handle(ScheduledEvent request, Context context) {
 		LambdaLogger logger = context.getLogger();
 		try {
-			Set<Event> events = readWordpressEvents(URL + "/events/all", SELECT_CLASS);
+			Set<Event> events = readEventsPage(URL + "/events/all", SELECT_CLASS);
 			RVACacheWriter.insertEvents(events);
 			logger.log("Events: " + events.size());
 			return events.size();

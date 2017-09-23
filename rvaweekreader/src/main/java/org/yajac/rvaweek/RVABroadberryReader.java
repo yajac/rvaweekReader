@@ -22,7 +22,7 @@ public class RVABroadberryReader extends RVAReader {
 	public static void main(String[] args) {
 		RVABroadberryReader rVAReader = new RVABroadberryReader();
 		try {
-			Set<Event> events = rVAReader.readWordpressEvents(URL + "/calendar", SELECT_CLASS);
+			Set<Event> events = rVAReader.readEventsPage(URL + "/calendar", SELECT_CLASS);
 			RVACacheWriter.insertEvents(events);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -32,7 +32,7 @@ public class RVABroadberryReader extends RVAReader {
 	public int handle(ScheduledEvent request, Context context) {
 		LambdaLogger logger = context.getLogger();
 		try {
-			Set<Event> events = readWordpressEvents(URL + "/calendar", SELECT_CLASS);
+			Set<Event> events = readEventsPage(URL + "/calendar", SELECT_CLASS);
 			RVACacheWriter.insertEvents(events);
 			logger.log("Events: " + events.size());
 			return events.size();
