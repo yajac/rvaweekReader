@@ -11,29 +11,28 @@ import org.yajac.rvaweek.aws.ScheduledEvent;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
-public class RVAStrangewaysReader extends RVAReader {
+public class HardywoodReader extends RVAReader {
 
-	private static String URL = "http://strangewaysbrewing.com";
-	private static String LOCATION_NAME = "Strangeways Brewery";
-	private static String SELECT_CLASS = "article";
+	private static String URL = "https://hardywood.com";
+	private static String LOCATION_NAME = "Hardywood Brewery";
+	private static String SELECT_CLASS = ".listed-event";
 	private static String CATEGORY = "Beer";
-	private static String ID_NAME = "Strangeways";
+	private static String ID_NAME = "Hardywood";
 
 	public static void main(String[] args) {
-		RVAStrangewaysReader rVAReader = new RVAStrangewaysReader();
+		HardywoodReader rVAReader = new HardywoodReader();
 		try {
-			Set<Event> events = rVAReader.readWordpressEvents(URL + "/happenings", SELECT_CLASS);
-			System.out.println("Size: " + events.size());
+			Set<Event> events = rVAReader.readWordpressEvents(URL + "/hwevents/taproom-events", SELECT_CLASS);
 			RVACacheWriter.insertEvents(events);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
 	}
 
-	public int handle(ScheduledEvent request, Context context) {
+	public int handle(ScheduledEvent input, Context context) {
 		LambdaLogger logger = context.getLogger();
 		try {
-			Set<Event> events = readWordpressEvents(URL + "/happenings", SELECT_CLASS);
+			Set<Event> events = readWordpressEvents(URL + "/hwevents/taproom-events", SELECT_CLASS);
 			RVACacheWriter.insertEvents(events);
 			logger.log("Events: " + events.size());
 			return events.size();
@@ -47,24 +46,24 @@ public class RVAStrangewaysReader extends RVAReader {
 		Event event = null;
 		try {
 			event = new Event();
-			event.setLocation(LOCATION_NAME);
+			event.setLocation(LOCATION_NAME + " " + element.getElementsByClass("listed-event-location").text());
 			event.setLocationURL(URL);
 			event.setCategory(CATEGORY);
 			event.setUrl(element.getElementsByTag("a").attr("href"));
-			event.setName(element.getElementsByTag("a").text());
-			final String dateString = element.getElementsByTag("time").attr("datetime");
-			final Date date = formatDate(dateString);
-			event.setDate(date);
+			event.setName(element.getElementsByTag("h1").text());
+			final String date = element.getElementsByTag("h3").get(0).text();
+			event.setDate(formatDate(date));
+			event.setTime(element.getElementsByTag("h3").get(1).text());
 			event.setImage(element.getElementsByTag("img").attr("src"));
-			event.setId(ID_NAME + dateString);
+			event.setId(ID_NAME + date);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		return event;
 	}
 
-	public Date formatDate(String date) throws ParseException {
-		SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
+	private Date formatDate(String date) throws ParseException {
+		SimpleDateFormat parser = new SimpleDateFormat("MMM dd, yyyy");
 		return parser.parse(date);
 	}
 
