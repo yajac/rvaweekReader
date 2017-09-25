@@ -1,16 +1,17 @@
 package org.yajac.rvaweek;
 
-import java.util.Set;
-
-import javax.xml.datatype.DatatypeFactory;
-
-import org.jsoup.nodes.Element;
-import org.yajac.rvaweek.aws.ScheduledEvent;
-
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import org.jsoup.nodes.Element;
+import org.yajac.rvaweek.aws.ScheduledEvent;
+import org.yajac.rvaweek.cache.RVACacheWriter;
+import org.yajac.rvaweek.model.Event;
+import org.yajac.rvaweek.web.WebReader;
 
-public class RVABroadberryReader extends RVAReader {
+import javax.xml.datatype.DatatypeFactory;
+import java.util.Set;
+
+public class RVABroadberryReader extends WebReader {
 
 	private static final String CLOSED_EVENT = "Closed for a Private Event";
 	private static String URL = "http://www.thebroadberry.com";

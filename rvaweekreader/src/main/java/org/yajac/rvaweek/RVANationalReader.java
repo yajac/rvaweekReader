@@ -1,33 +1,25 @@
 package org.yajac.rvaweek;
 
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import org.jsoup.nodes.Element;
+import org.yajac.rvaweek.aws.ScheduledEvent;
+import org.yajac.rvaweek.cache.RVACacheWriter;
+import org.yajac.rvaweek.model.Event;
+import org.yajac.rvaweek.web.WebReader;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
-import org.jsoup.nodes.Element;
-import org.yajac.rvaweek.aws.ScheduledEvent;
-
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
-
-public class RVANationalReader extends RVAReader {
+public class RVANationalReader extends WebReader {
 
 	private static String URL = "http://www.thenationalva.com";
 	private static String LOCATION_NAME = "The National";
 	private static String SELECT_CLASS = ".entry";
 	private static String CATEGORY = "Music";
 	private static String ID_NAME = "National";
-
-	public static void main(String[] args) {
-		RVANationalReader rVAReader = new RVANationalReader();
-		try {
-			Set<Event> events = rVAReader.readEventsPage(URL + "/events/all", SELECT_CLASS);
-			RVACacheWriter.insertEvents(events);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-	}
 
 	public int handle(ScheduledEvent request, Context context) {
 		LambdaLogger logger = context.getLogger();

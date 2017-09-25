@@ -1,4 +1,4 @@
-package org.yajac.cache.writer;
+package org.yajac.rvaweek.cache.writer;
 
 
 
@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.yajac.cache.CacheManager;
+import org.yajac.rvaweek.cache.CacheManager;
 
 public class CacheWriterTest {
 

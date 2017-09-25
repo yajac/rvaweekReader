@@ -10,8 +10,11 @@ import org.yajac.rvaweek.aws.ScheduledEvent;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import org.yajac.rvaweek.cache.RVACacheWriter;
+import org.yajac.rvaweek.model.Event;
+import org.yajac.rvaweek.web.WebReader;
 
-public class RVACamelReader extends RVAReader {
+public class RVACamelReader extends WebReader {
 
 	private static String URL = "http://www.thecamel.org";
 	private static String LOCATION_NAME = "The Camel";

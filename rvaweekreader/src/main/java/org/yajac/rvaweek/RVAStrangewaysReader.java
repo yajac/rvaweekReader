@@ -1,34 +1,25 @@
 package org.yajac.rvaweek;
 
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import org.jsoup.nodes.Element;
+import org.yajac.rvaweek.aws.ScheduledEvent;
+import org.yajac.rvaweek.cache.RVACacheWriter;
+import org.yajac.rvaweek.model.Event;
+import org.yajac.rvaweek.web.WebReader;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
-import org.jsoup.nodes.Element;
-import org.yajac.rvaweek.aws.ScheduledEvent;
-
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
-
-public class RVAStrangewaysReader extends RVAReader {
+public class RVAStrangewaysReader extends WebReader {
 
 	private static String URL = "http://strangewaysbrewing.com";
 	private static String LOCATION_NAME = "Strangeways Brewery";
 	private static String SELECT_CLASS = "article";
 	private static String CATEGORY = "Beer";
 	private static String ID_NAME = "Strangeways";
-
-	public static void main(String[] args) {
-		RVAStrangewaysReader rVAReader = new RVAStrangewaysReader();
-		try {
-			Set<Event> events = rVAReader.readEventsPage(URL + "/happenings", SELECT_CLASS);
-			System.out.println("Size: " + events.size());
-			RVACacheWriter.insertEvents(events);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-	}
 
 	public int handle(ScheduledEvent request, Context context) {
 		LambdaLogger logger = context.getLogger();

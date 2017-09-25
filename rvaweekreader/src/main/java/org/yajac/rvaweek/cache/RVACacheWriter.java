@@ -1,13 +1,12 @@
-package org.yajac.rvaweek;
+package org.yajac.rvaweek.cache;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.yajac.rvaweek.model.Event;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
-
-import org.yajac.cache.CacheManager;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RVACacheWriter extends CacheManager {
 

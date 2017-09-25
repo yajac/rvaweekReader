@@ -1,13 +1,13 @@
 package org.yajac.rvaweek;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-public class RVAStrangewaysReaderTest {
+public class RVAStrangewaysReaderTest extends ReaderTest{
 
 	@Test
 	public void testDate() throws ParseException {
@@ -17,4 +17,10 @@ public class RVAStrangewaysReaderTest {
 		Assert.assertTrue(date.after(Calendar.getInstance().getTime()));
 	}
 
+	@Test
+	public void testEvents() throws ParseException {
+		RVAStrangewaysReader reader = new RVAStrangewaysReader();
+		int events = reader.handle(null, context);
+		Assert.assertTrue(events > 0 );
+	}
 }

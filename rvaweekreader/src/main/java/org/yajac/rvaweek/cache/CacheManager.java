@@ -1,8 +1,8 @@
-package org.yajac.cache;
-
-import java.util.List;
+package org.yajac.rvaweek.cache;
 
 import redis.clients.jedis.Jedis;
+
+import java.util.List;
 
 public class CacheManager {
 

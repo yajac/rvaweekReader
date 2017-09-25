@@ -1,10 +1,11 @@
-package org.yajac.rvaweek;
+package org.yajac.rvaweek.web;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.xml.sax.SAXException;
+import org.yajac.rvaweek.model.Event;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,7 +14,7 @@ import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract  class RVAReader {
+public abstract  class WebReader {
 
 	private static final String USER_AGENT = "RVA Week";
 

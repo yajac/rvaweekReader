@@ -1,11 +1,11 @@
 /**
  * 
  */
-package org.yajac.rvaweek;
-
-import java.util.Date;
+package org.yajac.rvaweek.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Date;
 
 /**
  * @author ian.mcewan

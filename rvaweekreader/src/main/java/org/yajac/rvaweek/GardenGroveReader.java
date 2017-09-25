@@ -4,12 +4,15 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import org.jsoup.nodes.Element;
 import org.yajac.rvaweek.aws.ScheduledEvent;
+import org.yajac.rvaweek.cache.RVACacheWriter;
+import org.yajac.rvaweek.model.Event;
+import org.yajac.rvaweek.web.WebReader;
 
 import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
 
-public class GardenGroveReader extends RVAReader {
+public class GardenGroveReader extends WebReader {
 
 	private static String URL = "http://gardengrovebrewing.com";
 	private static String LOCATION_NAME = "Garden Grove Brewing Co.";
