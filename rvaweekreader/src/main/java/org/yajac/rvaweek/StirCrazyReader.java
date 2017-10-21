@@ -2,26 +2,26 @@ package org.yajac.rvaweek;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.yajac.rvaweek.aws.ScheduledEvent;
 import org.yajac.rvaweek.cache.RVACacheWriter;
-import org.yajac.rvaweek.facebook.FacebookAPIReader;
+import org.yajac.rvaweek.facebook.FacebookAPIReaderv2;
 import org.yajac.rvaweek.model.Event;
+import org.yajac.rvaweek.model.Source;
 
 import java.util.Set;
 
-public class StirCrazyReader extends FacebookAPIReader {
+public class StirCrazyReader extends FacebookAPIReaderv2 {
 
-    private static String URL = "https://graph.facebook.com/v2.10/stircrazyrva";
-    private static String LOCATION_NAME = "Stir Crazy Cafe";
-    private static String CATEGORY = "Coffee";
-    private static String ID_NAME = "StirCrazy";
+    private static final String SOURCE_URL = "https://www.facebook.com/pg/stircrazyrva";
+    private static final String LOCATION_NAME = "Stir Crazy Cafe";
+    private static final String CATEGORY = "Coffee";
+    private static final String FACEBOOK_ID = "38712615842";
 
 
     public int handle(ScheduledEvent request, Context context) {
         LambdaLogger logger = context.getLogger();
         try {
-            Set<Event> events = readEvents(URL);
+            Set<Event> events = readEvents(FACEBOOK_ID);
             RVACacheWriter.insertEvents(events);
             logger.log("Events: " + events.size());
             return events.size();
@@ -31,18 +31,13 @@ public class StirCrazyReader extends FacebookAPIReader {
         return 0;
     }
 
-    protected Event getBaseEvent(final String idBase) {
-        Event event = new Event();
-        event.setId(ID_NAME + idBase);
-        event.setLocation(LOCATION_NAME);
-        event.setLocationURL(URL);
-        event.setCategory(CATEGORY);
-        return event;
-    }
-
-
     @Override
-    protected Event handleEvent(JsonNode json) {
-        return null;
+    protected Source getSource() {
+        Source source = new Source();
+        source.setName(LOCATION_NAME);
+        source.setCategory(CATEGORY);
+        source.setUrl(SOURCE_URL);
+        return source;
     }
+
 }
