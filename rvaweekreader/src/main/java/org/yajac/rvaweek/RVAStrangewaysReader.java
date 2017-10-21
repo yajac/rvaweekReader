@@ -24,7 +24,7 @@ public class RVAStrangewaysReader extends WebReader {
 	public int handle(ScheduledEvent request, Context context) {
 		LambdaLogger logger = context.getLogger();
 		try {
-			Set<Event> events = readEventsPage(URL + "/happenings", SELECT_CLASS);
+			Set<Event> events = readEventsPage(URL + "/happening-type/rva-happenings/", SELECT_CLASS);
 			RVACacheWriter.insertEvents(events);
 			logger.log("Events: " + events.size());
 			return events.size();

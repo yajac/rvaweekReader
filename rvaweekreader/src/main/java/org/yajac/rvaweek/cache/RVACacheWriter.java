@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.yajac.rvaweek.model.Event;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
@@ -11,7 +12,7 @@ import java.util.Set;
 public class RVACacheWriter extends CacheManager {
 
 
-	public static void insertEvents(Set<Event> events) {
+	public static void insertEvents(Set<Event> events) throws IOException {
 
 		ObjectMapper mapper = new ObjectMapper();
 

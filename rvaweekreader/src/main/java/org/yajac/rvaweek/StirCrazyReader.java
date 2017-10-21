@@ -2,6 +2,7 @@ package org.yajac.rvaweek;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.yajac.rvaweek.aws.ScheduledEvent;
 import org.yajac.rvaweek.cache.RVACacheWriter;
 import org.yajac.rvaweek.facebook.FacebookAPIReader;
@@ -9,26 +10,23 @@ import org.yajac.rvaweek.model.Event;
 
 import java.util.Set;
 
-public class ThreeNotchedReader extends FacebookAPIReader {
+public class StirCrazyReader extends FacebookAPIReader {
 
-    private static String URL = "https://graph.facebook.com/v2.10/threenotchdrva";
-    private static String LOCATION_NAME = "Three Notchd RVA Collab House";
-    private static String CATEGORY = "Beer";
-    private static String ID_NAME = "3Notchd";
+    private static String URL = "https://graph.facebook.com/v2.10/stircrazyrva";
+    private static String LOCATION_NAME = "Stir Crazy Cafe";
+    private static String CATEGORY = "Coffee";
+    private static String ID_NAME = "StirCrazy";
 
 
     public int handle(ScheduledEvent request, Context context) {
         LambdaLogger logger = context.getLogger();
         try {
-            logger.log("Getting Events");
             Set<Event> events = readEvents(URL);
-            logger.log("Got Events: " + events.size());
             RVACacheWriter.insertEvents(events);
-            logger.log("Inserted Events: " + events.size());
+            logger.log("Events: " + events.size());
             return events.size();
         } catch (Exception e) {
-            logger.log("Error with Reader: " + e);
-            e.printStackTrace();
+            logger.log(e.getMessage());
         }
         return 0;
     }
@@ -43,4 +41,8 @@ public class ThreeNotchedReader extends FacebookAPIReader {
     }
 
 
+    @Override
+    protected Event handleEvent(JsonNode json) {
+        return null;
+    }
 }

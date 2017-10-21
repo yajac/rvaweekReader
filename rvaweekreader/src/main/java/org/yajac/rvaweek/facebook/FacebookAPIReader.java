@@ -15,7 +15,6 @@ import java.util.Set;
 
 public abstract class FacebookAPIReader {
 
-
     public Set<Event> readEvents(final String url) {
         Client client = Client.create();
         final String accessToken = FacebookAccessManager.getAccessToken();
@@ -77,6 +76,16 @@ public abstract class FacebookAPIReader {
         }
     }
 
-    protected abstract Event handleEvent(JsonNode json);
+    protected Event handleEvent(final JsonNode jsonNode) {
+        final String eventId = jsonNode.get("id").textValue();
+        final String dateString = jsonNode.get("start_time").textValue();
+        Event event = getBaseEvent(eventId);
+        event.setName(jsonNode.get("name").textValue());
+        event.setImage(getPicture(eventId));
+        event.setUrl("https://www.facebook.com/events/" + eventId);
+        event.setDate(formatDate(dateString));
+        return event;
+    }
 
+    protected abstract Event getBaseEvent(final String idBase);
 }

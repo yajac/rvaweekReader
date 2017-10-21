@@ -2,53 +2,41 @@ package org.yajac.rvaweek;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import org.jsoup.nodes.Element;
 import org.yajac.rvaweek.aws.ScheduledEvent;
 import org.yajac.rvaweek.cache.RVACacheWriter;
+import org.yajac.rvaweek.facebook.FacebookAPIReader;
 import org.yajac.rvaweek.model.Event;
-import org.yajac.rvaweek.web.WebReader;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.Set;
 
-public class GardenGroveReader extends WebReader {
+public class GardenGroveReader extends FacebookAPIReader {
 
-	private static String URL = "http://gardengrovebrewing.com";
+	private static String URL = "https://graph.facebook.com/v2.10/728608193821930";
 	private static String LOCATION_NAME = "Garden Grove Brewing Co.";
-	private static String SELECT_CLASS = ".simcal-event-details";
 	private static String CATEGORY = "Beer";
 	private static String ID_NAME = "GardenGrove";
 
 	public int handle(ScheduledEvent request, Context context) {
 		LambdaLogger logger = context.getLogger();
 		try {
-			Set<Event> events = readEventsPage(URL + "/all-events/events-calendar/", SELECT_CLASS);
+			logger.log("Getting Events");
+			Set<Event> events = readEvents(URL);
+			logger.log("Got Events: " + events.size());
 			RVACacheWriter.insertEvents(events);
-			logger.log("Events: " + events.size());
+			logger.log("Inserted Events: " + events.size());
 			return events.size();
 		} catch (Exception e) {
-			logger.log(e.getMessage());
+			logger.log("Error with Reader" + e);
 		}
 		return 0;
 	}
 
-	protected Event handleEvent(Element element) {
-		Event event = null;
-		event = new Event();
-		event.setLocation(LOCATION_NAME + " " + element.getElementsByClass("listed-event-location").text());
+	protected Event getBaseEvent(final String idBase) {
+		Event event = new Event();
+		event.setId(ID_NAME + idBase);
+		event.setLocation(LOCATION_NAME);
 		event.setLocationURL(URL);
 		event.setCategory(CATEGORY);
-		String startTime = element.getElementsByClass("simcal-event-start-time").attr("data-event-start");
-		Date date = Date.from(Instant.ofEpochSecond(Long.valueOf(startTime)));
-		event.setUrl(element.getElementsByTag("a").attr("href"));
-		event.setName(element.getElementsByTag("a").text());
-		event.setSecondaryName(element.getElementsByClass("simcal-event-title").text());
-		event.setDate(date);
-		event.setTime(element.getElementsByClass("simcal-event-start-time").text());
-		event.setImage(
-				"http://gardengrovebrewing.com/wp-content/themes/gardengrovebrewing/images/logo-garden-grove-brewing.png");
-		event.setId(ID_NAME + date);
 		return event;
 	}
 

@@ -33,6 +33,16 @@ public class Event {
 	private String price;
 	@JsonProperty("category")
 	private String category;
+
+	@JsonProperty("description")
+	private String description;
+	@JsonProperty("shortDescription")
+	private String shortDescription;
+	@JsonProperty("hasTime")
+	private Boolean hasTime;
+	@JsonProperty("eventLocation")
+	private EventLocation eventLocation;
+
 	@JsonProperty("id")
 	private String id;
 
@@ -119,6 +129,38 @@ public class Event {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getShortDescription() {
+		return shortDescription;
+	}
+
+	public void setShortDescription(String shortDescription) {
+		this.shortDescription = shortDescription;
+	}
+
+	public Boolean getHasTime() {
+		return hasTime;
+	}
+
+	public void setHasTime(Boolean hasTime) {
+		this.hasTime = hasTime;
+	}
+
+	public EventLocation getEventLocation() {
+		return eventLocation;
+	}
+
+	public void setEventLocation(EventLocation eventLocation) {
+		this.eventLocation = eventLocation;
 	}
 
 }

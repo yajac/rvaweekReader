@@ -1,18 +1,16 @@
 package org.yajac.rvaweek;
 
-import java.util.Set;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-
-import org.jsoup.nodes.Element;
-import org.yajac.rvaweek.aws.ScheduledEvent;
-
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import org.jsoup.nodes.Element;
+import org.yajac.rvaweek.aws.ScheduledEvent;
 import org.yajac.rvaweek.cache.RVACacheWriter;
 import org.yajac.rvaweek.model.Event;
 import org.yajac.rvaweek.web.WebReader;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import java.util.Set;
 
 public class RVACamelReader extends WebReader {
 
@@ -63,6 +61,9 @@ public class RVACamelReader extends WebReader {
 			event.setLocationURL(URL);
 			event.setCategory(CATEGORY);
 			event.setId(ID_NAME + date);
+			if ("PRIVATE EVENT".equalsIgnoreCase(event.getName())) {
+				return null;
+			}
 		} catch (DatatypeConfigurationException e) {
 			e.printStackTrace();
 		}
