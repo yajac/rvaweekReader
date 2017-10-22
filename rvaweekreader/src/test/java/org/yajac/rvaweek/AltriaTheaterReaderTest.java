@@ -5,11 +5,11 @@ import org.junit.Test;
 
 import java.text.ParseException;
 
-public class ScottsAdditionReaderTest extends ReaderTest {
+public class AltriaTheaterReaderTest extends ReaderTest {
 
     @Test
     public void testEvents() throws ParseException {
-        ScottsAdditionReader reader = new ScottsAdditionReader();
+        AltriaTheaterReader reader = new AltriaTheaterReader();
         int events = reader.handleRequest(null, context);
         Assert.assertTrue(events > 0);
     }

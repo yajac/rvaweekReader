@@ -11,26 +11,36 @@ import org.yajac.rvaweek.model.Source;
 
 import java.util.Set;
 
-public class StirCrazyReader extends FacebookAPIReaderv2 implements RequestHandler<ScheduledEvent, Integer> {
+public class IsleyReader extends FacebookAPIReaderv2 implements RequestHandler<ScheduledEvent, Integer> {
 
-    private static final String SOURCE_URL = "https://www.facebook.com/pg/stircrazyrva";
-    private static final String LOCATION_NAME = "Stir Crazy Cafe";
-    private static final String CATEGORY = "Coffee";
-    private static final String FACEBOOK_ID = "38712615842";
+    private static final String SOURCE_URL = "https://www.facebook.com/pg/isleybrewingcompany";
+    private static final String LOCATION_NAME = "Isley Brewing Company";
+    private static final String CATEGORY = "Beer";
+
+    private static final String FACEBOOK_ID = "444633445606607";
 
 
     public Integer handleRequest(ScheduledEvent request, Context context) {
         LambdaLogger logger = context.getLogger();
         try {
+            logger.log("Getting Events");
             Set<Event> events = readEvents(FACEBOOK_ID);
+            logger.log("Got Events: " + events.size());
             RVACacheWriter.insertEvents(events);
-            logger.log("Events: " + events.size());
+            logger.log("Inserted Events: " + events.size());
             return events.size();
         } catch (Exception e) {
             logger.log("Error with Reader: " + e);
             e.printStackTrace();
         }
         return 0;
+    }
+
+    protected Event filterEvent(Event event) {
+        if (event.getEventLocation() != null && event.getEventLocation().getName() != null) {
+            return event;
+        }
+        return null;
     }
 
     @Override
@@ -41,5 +51,4 @@ public class StirCrazyReader extends FacebookAPIReaderv2 implements RequestHandl
         source.setUrl(SOURCE_URL);
         return source;
     }
-
 }

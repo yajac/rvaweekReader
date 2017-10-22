@@ -21,7 +21,6 @@ public abstract class FacebookAPIReaderv2 {
     public Set<Event> readEvents(final String id) {
         final String url = "https://graph.facebook.com/v2.10/" + id + "/events";
         final ClientResponse response = getClientResponse(url);
-        System.out.println("Got Response");
         if (response.getStatus() != 200) {
             throw new RuntimeException("Failed : HTTP error code : "
                     + response.getStatus());

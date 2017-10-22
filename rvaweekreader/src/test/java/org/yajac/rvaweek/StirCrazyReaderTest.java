@@ -10,7 +10,7 @@ public class StirCrazyReaderTest extends ReaderTest {
     @Test
     public void testEvents() throws ParseException {
         StirCrazyReader reader = new StirCrazyReader();
-        int events = reader.handle(null, context);
+        int events = reader.handleRequest(null, context);
         Assert.assertTrue(events > 0);
     }
 

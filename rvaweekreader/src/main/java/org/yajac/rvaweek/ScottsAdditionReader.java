@@ -2,6 +2,7 @@ package org.yajac.rvaweek;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.yajac.rvaweek.aws.ScheduledEvent;
 import org.yajac.rvaweek.cache.RVACacheWriter;
 import org.yajac.rvaweek.facebook.FacebookAPIReaderv2;
@@ -10,7 +11,7 @@ import org.yajac.rvaweek.model.Source;
 
 import java.util.Set;
 
-public class ScottsAdditionReader extends FacebookAPIReaderv2 {
+public class ScottsAdditionReader extends FacebookAPIReaderv2 implements RequestHandler<ScheduledEvent, Integer> {
 
     private static final String SOURCE_URL = "https://www.facebook.com/ScottsAddition/";
     private static final String LOCATION_NAME = "Scott's Addition";
@@ -19,7 +20,7 @@ public class ScottsAdditionReader extends FacebookAPIReaderv2 {
     private static final String FACEBOOK_ID = "117656351651216";
 
 
-    public int handle(ScheduledEvent request, Context context) {
+    public Integer handleRequest(ScheduledEvent request, Context context) {
         LambdaLogger logger = context.getLogger();
         try {
             logger.log("Getting Events");

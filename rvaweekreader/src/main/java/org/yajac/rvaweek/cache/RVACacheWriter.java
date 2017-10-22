@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
+import java.util.TimeZone;
 
 public class RVACacheWriter extends CacheManager {
 
@@ -31,6 +32,7 @@ public class RVACacheWriter extends CacheManager {
 
 	private static String getDateString(Date date) {
 		SimpleDateFormat parser = new SimpleDateFormat("MMddYYYY");
+		parser.setTimeZone(TimeZone.getTimeZone("EST"));
 		return parser.format(date);
 	}
 
