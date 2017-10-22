@@ -5,17 +5,17 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.yajac.rvaweek.aws.ScheduledEvent;
 import org.yajac.rvaweek.cache.RVACacheWriter;
-import org.yajac.rvaweek.facebook.FacebookAPIReaderv2;
+import org.yajac.rvaweek.facebook.FacebookAPIReader;
 import org.yajac.rvaweek.model.Event;
 import org.yajac.rvaweek.model.Source;
 
 import java.util.Set;
 
-public class AltriaTheaterReader extends FacebookAPIReaderv2 implements RequestHandler<ScheduledEvent, Integer> {
+public class AltriaTheaterReader extends FacebookAPIReader implements RequestHandler<ScheduledEvent, Integer> {
 
     private static final String SOURCE_URL = "https://www.altriatheater.com/events";
     private static final String LOCATION_NAME = "Altria Theater";
-    private static final String CATEGORY = "Performance Arts";
+    private static final String CATEGORY = "Arts";
 
     private static final String FACEBOOK_ID = "73348949666";
 

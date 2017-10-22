@@ -2,49 +2,51 @@ package org.yajac.rvaweek;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.yajac.rvaweek.aws.ScheduledEvent;
 import org.yajac.rvaweek.cache.RVACacheWriter;
 import org.yajac.rvaweek.facebook.FacebookAPIReader;
 import org.yajac.rvaweek.model.Event;
-import org.yajac.rvaweek.model.EventLocation;
+import org.yajac.rvaweek.model.Source;
 
 import java.util.Set;
 
-public class FinalGravityReader extends FacebookAPIReader {
+public class FinalGravityReader extends FacebookAPIReader implements RequestHandler<ScheduledEvent, Integer> {
 
-    private static String URL = "https://graph.facebook.com/v2.10/FinalGravityBrewingCo";
+    private static String SOURCE_URL = "http://www.oggravity.com/our-brewery/";
     private static String LOCATION_NAME = "Final Gravity Brewing Co";
     private static String CATEGORY = "Beer";
     private static String ID_NAME = "FinalGravity";
 
+    public static String FACEBOOK_ID = "819112448175458";
 
-    public int handle(ScheduledEvent request, Context context) {
+
+    public Integer handleRequest(ScheduledEvent request, Context context) {
         LambdaLogger logger = context.getLogger();
         try {
-            Set<Event> events = readEvents(URL);
+            logger.log("Getting Events");
+            Set<Event> events = readEvents(FACEBOOK_ID);
+            logger.log("Got Events: " + events.size());
             RVACacheWriter.insertEvents(events);
-            logger.log("Events: " + events.size());
+            logger.log("Inserted Events: " + events.size());
             return events.size();
         } catch (Exception e) {
-            logger.log(e.getMessage());
+            logger.log("Error with Reader" + e);
+            e.printStackTrace();
         }
         return 0;
     }
 
-    protected Event getBaseEvent(final String idBase) {
-        Event event = new Event();
-        event.setId(ID_NAME + idBase);
-        event.setLocation(LOCATION_NAME);
-        event.setLocationURL(URL);
-        event.setCategory(CATEGORY);
+    protected Event filterEvent(Event event) {
         return event;
     }
 
-    private EventLocation getEventLocation(JsonNode locationNode) {
-        EventLocation eventLocation = new EventLocation();
-        // event
-        return eventLocation;
+    @Override
+    protected Source getSource() {
+        Source source = new Source();
+        source.setName(LOCATION_NAME);
+        source.setCategory(CATEGORY);
+        source.setUrl(SOURCE_URL);
+        return source;
     }
-
 }

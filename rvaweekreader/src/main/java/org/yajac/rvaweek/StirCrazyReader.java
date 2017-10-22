@@ -5,13 +5,13 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.yajac.rvaweek.aws.ScheduledEvent;
 import org.yajac.rvaweek.cache.RVACacheWriter;
-import org.yajac.rvaweek.facebook.FacebookAPIReaderv2;
+import org.yajac.rvaweek.facebook.FacebookAPIReader;
 import org.yajac.rvaweek.model.Event;
 import org.yajac.rvaweek.model.Source;
 
 import java.util.Set;
 
-public class StirCrazyReader extends FacebookAPIReaderv2 implements RequestHandler<ScheduledEvent, Integer> {
+public class StirCrazyReader extends FacebookAPIReader implements RequestHandler<ScheduledEvent, Integer> {
 
     private static final String SOURCE_URL = "https://www.facebook.com/pg/stircrazyrva";
     private static final String LOCATION_NAME = "Stir Crazy Cafe";

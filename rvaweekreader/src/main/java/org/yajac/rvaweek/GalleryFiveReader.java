@@ -11,13 +11,13 @@ import org.yajac.rvaweek.model.Source;
 
 import java.util.Set;
 
-public class ScottsAdditionReader extends FacebookAPIReader implements RequestHandler<ScheduledEvent, Integer> {
+public class GalleryFiveReader extends FacebookAPIReader implements RequestHandler<ScheduledEvent, Integer> {
 
-    private static final String SOURCE_URL = "https://www.facebook.com/ScottsAddition/";
-    private static final String LOCATION_NAME = "Scott's Addition";
-    private static final String CATEGORY = "Neighborhood";
+    private static final String SOURCE_URL = "https://www.facebook.com/pg/gallery5arts";
+    private static final String LOCATION_NAME = "Gallery5";
+    private static final String CATEGORY = "Arts";
 
-    private static final String FACEBOOK_ID = "117656351651216";
+    private static final String FACEBOOK_ID = "59016522192";
 
 
     public Integer handleRequest(ScheduledEvent request, Context context) {
@@ -36,6 +36,12 @@ public class ScottsAdditionReader extends FacebookAPIReader implements RequestHa
         return 0;
     }
 
+    protected Event filterEvent(Event event) {
+        if (event.getEventLocation() != null && event.getEventLocation().getName() != null) {
+            return event;
+        }
+        return null;
+    }
 
     @Override
     protected Source getSource() {
