@@ -2,59 +2,51 @@ package org.yajac.rvaweek;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import org.jsoup.nodes.Element;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.yajac.rvaweek.aws.ScheduledEvent;
 import org.yajac.rvaweek.cache.RVACacheWriter;
+import org.yajac.rvaweek.facebook.FacebookAPIReader;
 import org.yajac.rvaweek.model.Event;
-import org.yajac.rvaweek.web.WebReader;
+import org.yajac.rvaweek.model.Source;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Set;
 
-public class RVANationalReader extends WebReader {
+public class RVANationalReader extends FacebookAPIReader implements RequestHandler<ScheduledEvent, Integer> {
 
-	private static String URL = "http://www.thenationalva.com";
+	private static String SOURCE_URL = "http://www.thenationalva.com";
 	private static String LOCATION_NAME = "The National";
-	private static String SELECT_CLASS = ".entry";
 	private static String CATEGORY = "Music";
-	private static String ID_NAME = "National";
 
-	public int handle(ScheduledEvent request, Context context) {
+	public static String FACEBOOK_ID = "40197037867";
+
+
+	public Integer handleRequest(ScheduledEvent request, Context context) {
 		LambdaLogger logger = context.getLogger();
 		try {
-			Set<Event> events = readEventsPage(URL + "/events/all", SELECT_CLASS);
+			logger.log("Getting Events");
+			Set<Event> events = readEvents(FACEBOOK_ID);
+			logger.log("Got Events: " + events.size());
 			RVACacheWriter.insertEvents(events);
-			logger.log("Events: " + events.size());
+			logger.log("Inserted Events: " + events.size());
 			return events.size();
 		} catch (Exception e) {
-			logger.log(e.getMessage());
+			logger.log("Error with Reader" + e);
+			e.printStackTrace();
 		}
 		return 0;
 	}
 
-	protected Event handleEvent(Element element) {
-		Event event = null;
-		try {
-			event = new Event();
-			event.setUrl(element.getElementsByTag("a").attr("href"));
-			event.setName(element.getElementsByTag("h3").get(0).getElementsByTag("a").text());
-			event.setSecondaryName(element.getElementsByTag("h4").text());
-			String date = element.getElementsByClass("date").text();
-			event.setTime(element.getElementsByClass("time").text());
-			event.setImage(element.getElementsByTag("img").attr("src"));
-			SimpleDateFormat parser = new SimpleDateFormat("EEE, MMM dd, yyyy");
-			Date fullDate = parser.parse(date);
-			event.setDate(fullDate);
-			event.setLocation(LOCATION_NAME);
-			event.setLocationURL(URL);
-			event.setCategory(CATEGORY);
-			event.setId(ID_NAME + date);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+	protected Event filterEvent(Event event) {
 		return event;
+	}
+
+	@Override
+	protected Source getSource() {
+		Source source = new Source();
+		source.setName(LOCATION_NAME);
+		source.setCategory(CATEGORY);
+		source.setUrl(SOURCE_URL);
+		return source;
 	}
 
 }

@@ -22,16 +22,6 @@ public class RVACamelReader extends WebReader {
 	private static String IMAGE = "https://cdn.ticketfly.com/wp-content/themes/thecamel/images/Camel-Logo-v2.jpg";
 
 
-	public static void main(String[] args) {
-		RVACamelReader rVAReader = new RVACamelReader();
-		try {
-			Set<Event> events = rVAReader.readEventsPage(URL, SELECT_CLASS);
-			RVACacheWriter.insertEvents(events);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-	}
-
 	public int handle(ScheduledEvent request, Context context) {
 		LambdaLogger logger = context.getLogger();
 		try {

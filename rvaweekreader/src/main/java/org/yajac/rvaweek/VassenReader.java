@@ -11,13 +11,13 @@ import org.yajac.rvaweek.model.Source;
 
 import java.util.Set;
 
-public class FinalGravityReader extends FacebookAPIReader implements RequestHandler<ScheduledEvent, Integer> {
+public class VassenReader extends FacebookAPIReader implements RequestHandler<ScheduledEvent, Integer> {
 
-    private static String SOURCE_URL = "http://www.oggravity.com/our-brewery/";
-    private static String LOCATION_NAME = "Final Gravity Brewing Co";
+    private static String SOURCE_URL = "http://www.vasenbrewing.com/#events";
+    private static String LOCATION_NAME = "Väsen Brewing Company";
     private static String CATEGORY = "Beer";
 
-    public static String FACEBOOK_ID = "819112448175458";
+    public static String FACEBOOK_ID = "230234597307851";
 
 
     public Integer handleRequest(ScheduledEvent request, Context context) {
@@ -37,7 +37,10 @@ public class FinalGravityReader extends FacebookAPIReader implements RequestHand
     }
 
     protected Event filterEvent(Event event) {
-        return event;
+        if (event.getEventLocation() != null && LOCATION_NAME.equalsIgnoreCase(event.getEventLocation().getName())) {
+            return event;
+        }
+        return null;
     }
 
     @Override

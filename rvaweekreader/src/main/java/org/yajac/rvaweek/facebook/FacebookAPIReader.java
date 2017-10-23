@@ -18,7 +18,7 @@ import java.util.Set;
 
 public abstract class FacebookAPIReader {
 
-    private static final String LIMIT = "50";
+    private static final String LIMIT = "40";
 
     public Set<Event> readEvents(final String id) {
         final String url = "https://graph.facebook.com/v2.10/" + id + "/events";

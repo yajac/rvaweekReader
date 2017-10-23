@@ -20,16 +20,6 @@ public class RVABroadberryReader extends WebReader {
 	private static String CATEGORY = "Music";
 	private static String ID_NAME = "Broadberry";
 
-	public static void main(String[] args) {
-		RVABroadberryReader rVAReader = new RVABroadberryReader();
-		try {
-			Set<Event> events = rVAReader.readEventsPage(URL + "/calendar", SELECT_CLASS);
-			RVACacheWriter.insertEvents(events);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-	}
-
 	public int handle(ScheduledEvent request, Context context) {
 		LambdaLogger logger = context.getLogger();
 		try {
